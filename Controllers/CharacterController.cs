@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnet_rpg.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rpg.Controllers
@@ -9,28 +10,29 @@ namespace dotnet_rpg.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class CharacterController : ControllerBase
-    {
-        private static List<Character> characters= new List<Character>{
-            new Character(),
-            new Character{Id=1,Name="Sam"}
-        };
+    {   
+        private readonly ICharacterService characterService;
+        public CharacterController(ICharacterService characterService)
+        {
+            this.characterService = characterService;
+            
+        }
         [HttpGet]
         [Route("GetAll")] //instead of route we could have directly used [HttpGet("GetAll)] would have worked fine
         public ActionResult<List<Character>> Get()
         {
-            return Ok(characters);
+            return Ok(this.characterService.GetAllCharacters());
         }
         //we want now a single character from the list
         [HttpGet("{id}")]
         public ActionResult<Character> GetSingle(int id)
         {
-            return Ok(characters.FirstOrDefault(c=>c.Id==id));
+            return Ok(this.characterService.GetCharacterById(id));
         }
         [HttpPost]
         public ActionResult<List<Character>> AddCharacter(Character newCharacter)
         {
-            characters.Add(newCharacter);
-            return Ok(characters);
+            return Ok(this.characterService.AddCharacter(newCharacter));
         }
     }
 }
