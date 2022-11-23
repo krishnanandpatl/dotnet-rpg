@@ -15,9 +15,16 @@ namespace dotnet_rpg.Controllers
             new Character{Name="Sam"}
         };
         [HttpGet]
+        [Route("GetAll")] //instead of route we could have directly used [HttpGet("GetAll)] would have worked fine
         public ActionResult<List<Character>> Get()
         {
             return Ok(characters);
+        }
+        //we want now a single character from the list
+        [HttpGet]
+        public ActionResult<Character> GetSingle()
+        {
+            return Ok(characters[0]);
         }
     }
 }
