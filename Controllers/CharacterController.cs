@@ -12,7 +12,7 @@ namespace dotnet_rpg.Controllers
     {
         private static List<Character> characters= new List<Character>{
             new Character(),
-            new Character{Name="Sam"}
+            new Character{Id=1,Name="Sam"}
         };
         [HttpGet]
         [Route("GetAll")] //instead of route we could have directly used [HttpGet("GetAll)] would have worked fine
@@ -21,10 +21,10 @@ namespace dotnet_rpg.Controllers
             return Ok(characters);
         }
         //we want now a single character from the list
-        [HttpGet]
-        public ActionResult<Character> GetSingle()
+        [HttpGet("{id}")]
+        public ActionResult<Character> GetSingle(int id)
         {
-            return Ok(characters[0]);
+            return Ok(characters.FirstOrDefault(c=>c.Id==id));
         }
     }
 }
