@@ -19,18 +19,18 @@ namespace dotnet_rpg.Controllers
         }
         [HttpGet]
         [Route("GetAll")] //instead of route we could have directly used [HttpGet("GetAll)] would have worked fine
-        public async Task<ActionResult<List<Character>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> Get()
         {
             return Ok(await this.characterService.GetAllCharacters());
         }
         //we want now a single character from the list
         [HttpGet("{id}")]
-        public async Task<ActionResult<Character>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id)
         {
             return Ok(await this.characterService.GetCharacterById(id));
         }
         [HttpPost]
-        public async Task<ActionResult<List<Character>>> AddCharacter(Character newCharacter)
+        public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacter(Character newCharacter)
         {
             return Ok(await this.characterService.AddCharacter(newCharacter));
         }
