@@ -46,8 +46,12 @@ namespace dotnet_rpg.Services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
         {
             ServiceResponse<GetCharacterDto> response=new ServiceResponse<GetCharacterDto>();
-            try{
+            try
+            {
             Character character=characters.FirstOrDefault(c=>c.Id==updatedCharacter.Id);
+            //by using mapper
+            // _mapper.Map<Character>(updatedCharacter,character); will update all the default fields even if you don't want
+
             character.Name=updatedCharacter.Name;
             character.HitPoints=updatedCharacter.HitPoints;
             character.Strength=updatedCharacter.Strength;
