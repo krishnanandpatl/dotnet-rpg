@@ -27,13 +27,11 @@ namespace dotnet_rpg.Data
             {
                 response.Success=false;
                 response.Message="Credentials wrong";
-                return response;
             }
             else if(!VerifyPassword(password,user.PasswordHash,user.PasswordSalt))
             {
                 response.Success=false;
                 response.Message="Credentials wrong";
-                return response;
             }
             else
             {
