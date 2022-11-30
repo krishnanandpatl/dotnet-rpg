@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_rpg.Dtos.Character;
 using dotnet_rpg.Services.CharacterService;
@@ -24,7 +25,8 @@ namespace dotnet_rpg.Controllers
         [Route("GetAll")] //instead of route we could have directly used [HttpGet("GetAll)] would have worked fine
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
         {
-            return Ok(await _characterService.GetAllCharacters());
+            int useId=int.Parse(User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier).Value);
+            return Ok(await _characterService.GetAllCharacters(useId));
         }
         //we want now a single character from the list
         [HttpGet("{id}")]
