@@ -43,10 +43,23 @@ namespace dotnet_rpg.Services.CharacterService
             ServiceResponse<List<GetCharacterDto>> response=new ServiceResponse<List<GetCharacterDto>>();
             try
             {
-            Character character=await _context.Characters.FirstAsync(c=>c.Id==id);
-            _context.Characters.Remove(character);
-            await _context.SaveChangesAsync();
-            response.Data=_context.Characters.Select(c=>_mapper.Map<GetCharacterDto>(c)).ToList();
+            Character character=await _context.Characters
+                    .FirstOrDefaultAsync(c=>c.Id==id&&c.User.Id==GetUserId());
+            if(character!=null)
+            {
+                _context.Characters.Remove(character);
+
+                await _context.SaveChangesAsync();
+                response.Data=_context.Characters
+                .Where(c=>c.User.Id==GetUserId())
+                .Select(c=>_mapper.Map<GetCharacterDto>(c)).ToList();
+            }
+            else{
+                response.Success=false;
+                response.Message="No character found";
+            }
+
+            
             }catch(Exception exp)
             {
                 response.Success=false;
