@@ -91,10 +91,14 @@ namespace dotnet_rpg.Services.CharacterService
             ServiceResponse<GetCharacterDto> response=new ServiceResponse<GetCharacterDto>();
             try
             {
-            var character=await _context.Characters.FirstOrDefaultAsync(c=>c.Id==updatedCharacter.Id);
+            var character=await _context.Characters
+            .Include(c=>c.User)
+            .FirstOrDefaultAsync(c=>c.Id==updatedCharacter.Id);
             //by using mapper
             // _mapper.Map<Character>(updatedCharacter,character); will update all the default fields even if you don't want
 
+            if(character.User.Id==GetUserId())
+            {
             character.Name=updatedCharacter.Name;
             character.HitPoints=updatedCharacter.HitPoints;
             character.Strength=updatedCharacter.Strength;
@@ -105,6 +109,12 @@ namespace dotnet_rpg.Services.CharacterService
             await _context.SaveChangesAsync();
 
             response.Data=_mapper.Map<GetCharacterDto>(character);
+            }
+            else
+            {
+                response.Success=false;
+                response.Message="Character not found";
+            }
             }catch(Exception exp)
             {
                 response.Success=false;
